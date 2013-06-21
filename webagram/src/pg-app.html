@@ -19,9 +19,9 @@
     <g-panels id="panels" class="flex" index="1" transition="flow">
       <g-ribbon id="menu" label="Webagram" valueattr="label" on-activate="toggle" selected="{{selected}}">
     
+          <g-menu-item src="images/sample.png" iconsize="32" label="Home"></g-menu-item>
           <g-menu-item src="images/sample.png" iconsize="32" label="Capture"></g-menu-item>
           <g-menu-item src="images/sample.png" iconsize="32" label="Activity"></g-menu-item>
-          <g-menu-item src="images/sample.png" iconsize="32" label="Uploads"></g-menu-item>
           <g-menu-item src="images/sample.png" iconsize="32" label="About"></g-menu-item>
 
       </g-ribbon>
@@ -50,7 +50,7 @@
         this.super();
         //this.$.ace.editor.getSession().setTabSize(2);
         this.asyncMethod(function() {
-          this.$.menu.selected = 'Capture';
+          this.$.menu.selected = 'Home';
         });
       
       },

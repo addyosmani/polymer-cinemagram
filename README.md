@@ -1,4 +1,4 @@
-polymer-latency
+polymer-webagram
 ===============
 
 A small polymer app

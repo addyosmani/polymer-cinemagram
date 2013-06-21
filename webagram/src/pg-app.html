@@ -1,0 +1,62 @@
+<!--
+/*
+ * Copyright 2013 The Polymer Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+-->
+<link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-app.html">
+<link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-ajax.html">
+<link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-toolbar.html">
+<link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-panels.html">
+<link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-menu-item.html">
+<link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-ribbon.html">
+<link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-icon-button.html">
+
+<element name="pg-app" extends="g-app">
+  <link rel="stylesheet" href="css/pg-app.css" />
+  <template>
+    <g-panels id="panels" class="flex" index="1" transition="flow">
+      <g-ribbon id="menu" label="Webagram" valueattr="label" on-activate="toggle" selected="{{selected}}">
+    
+          <g-menu-item src="images/sample.png" iconsize="32" label="Capture"></g-menu-item>
+          <g-menu-item src="images/sample.png" iconsize="32" label="Activity"></g-menu-item>
+          <g-menu-item src="images/sample.png" iconsize="32" label="Uploads"></g-menu-item>
+          <g-menu-item src="images/sample.png" iconsize="32" label="About"></g-menu-item>
+
+      </g-ribbon>
+      <div id="main">
+        <g-toolbar>
+          <g-icon-button src="images/menu.png" on-tap="toggle"></g-icon-button>
+          <div>{{selected}}</div>
+        </g-toolbar>
+        <div id="content">
+          
+          <div id="outputContainer">
+            <div class="outputFrameContainer">
+              <iframe id="output"></iframe>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+    </g-panels>
+  </template>
+  <script>
+    Polymer.register(this, {
+      ready: function() {
+        this.super();
+        //this.$.ace.editor.getSession().setTabSize(2);
+        this.asyncMethod(function() {
+          this.$.menu.selected = 'Capture';
+        });
+      
+      },
+      toggle: function() {
+        this.$.panels.toggleBetween('menu', 'main');
+      }
+    });
+  </script>
+</element>

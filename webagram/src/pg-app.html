@@ -149,7 +149,7 @@
 
         navigator.getUserMedia({
             video: true
-        }, function(){
+        }, function(stream){
     
           this.localMediaStream = stream;
           this.$.video.src = window.webkitURL.createObjectURL(stream);

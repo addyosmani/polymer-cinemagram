@@ -12,11 +12,18 @@
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-menu-item.html">
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-ribbon.html">
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-icon-button.html">
+<link rel="import" href="../scripts/polymer-all/polymer-ui-elements/polymer-ui-tabs/polymer-ui-tabs.html">
+<link rel="import" href="../scripts/polymer-all/polymer-ui-elements/polymer-ui-icon-button/polymer-ui-icon-button.html">
+
+
+<link rel="import" href="../scripts/polymer-all/polymer-elements/polymer-layout/polymer-slide.html">
 
 <element name="pg-app" extends="g-app">
   <link rel="stylesheet" href="css/pg-app.css" />
   <template>
     <g-panels id="panels" class="flex" index="1" transition="flow">
+
+
       <g-ribbon id="menu" label="Webagram" valueattr="label" on-activate="toggle" selected="{{selected}}">
     
           <g-menu-item src="images/sample.png" iconsize="32" label="Home"></g-menu-item>
@@ -25,38 +32,164 @@
           <g-menu-item src="images/sample.png" iconsize="32" label="About"></g-menu-item>
 
       </g-ribbon>
+
+
       <div id="main">
         <g-toolbar>
           <g-icon-button src="images/menu.png" on-tap="toggle"></g-icon-button>
           <div>{{selected}}</div>
+
         </g-toolbar>
-        <div id="content">
-          
-          <div id="outputContainer">
-            <div class="outputFrameContainer">
-              <iframe id="output"></iframe>
+
+        <div id="content" class="polymer-ui-dark-theme">
+          <p>Welcome to Webagram!</p>
+  
+          <div class="row">
+            <div class="span4">
+              <video id="video" autoplay></video>
+              <canvas id="canvas"></canvas>
+            </div>
+            <div class="replay">
+              <img width=360 height=360 src="" id="replay-screen">
             </div>
           </div>
 
+          <!--
+          <div class="row">
+            <div class="span12">
+              <a href="#" id="play">Record</a>
+              <a href="#" id="stop">Stop</a>
+              <a href="#" id="replay">Replay</a>
+              <a href="#" id="makegif">Gif it!</a>
+              <a href="#" id="delete-replay">Delete</a>
+            </div>
+          </div>
+        -->
         </div>
 
 
+
+       <g-toolbar>
+
+          <g-icon-button src="images/record.png" on-tap="record"></g-icon-button>
+
+          <g-icon-button src="images/stop.png" on-tap="stop"></g-icon-button>
+
+          <g-icon-button src="images/play.png" on-tap="play"></g-icon-button>
+
+          <g-icon-button src="images/save.png" on-tap="save"></g-icon-button>
+
+          <g-icon-button src="images/delete.png" on-tap="cancel"></g-icon-button>
+
+        </g-toolbar>
+
+
+        </div>
+
       </div>
+
+
+     <div id="Home" class="subpanel">
+      Welcome to Webagram!
+     </div>
+
+     <div id="About" class="subpanel">
+      About
+     </div>
+
+     <div id="Activity" class="subpanel">
+     </div>
+
+      <div id="Capture" class="subpanel">
+        <g-toolbar>
+          <g-icon-button src="images/menu.png" on-tap="toggle"></g-icon-button>
+          <div>{{selected}}</div>
+        </g-toolbar>
+        Capture stuff
+       </div>
+
     </g-panels>
   </template>
   <script>
     Polymer.register(this, {
+      gif: new GIF({
+        workers:2,
+        quality: 10
+      }),
       ready: function() {
         this.super();
-        //this.$.ace.editor.getSession().setTabSize(2);
+
         this.asyncMethod(function() {
-          this.$.menu.selected = 'Home';
+
+
+          var selected = 'Capture';
+
+          this._stop = false;
+
+          this.$.menu.selected = selected;
+          //this.$.HomePanel.style.display = 'block';
+
+          this.gif.on('finished', function (blob) {
+            window.open(URL.createObjectURL(blob));
+          });
+
         });
       
       },
       toggle: function() {
         this.$.panels.toggleBetween('menu', 'main');
+        //this.$.panels.toggleBetween('main', this.$.menu.selected);
+      },
+      play: function(){
+        alert('play');
+
+      },
+      record: function(){
+        alert('record');
+
+        navigator.getUserMedia({
+            video: true
+        }, function(){
+    
+          this.localMediaStream = stream;
+          this.$.video.src = window.webkitURL.createObjectURL(stream);
+
+          var back = this.$.canvas;
+          var backcontext = back.getContext('2d');
+
+          cw = 360;
+          ch = 240;
+          back.width = cw;
+          back.height = ch;
+          draw(video, backcontext, cw, ch, this._stop);
+
+        }, function(){
+          alert('User Media not supported in your browser');
+        });
+
+
+      },
+      stop: function(){
+        alert('stop');
+        this.$.video.pause();
+        if (this.localMediaStream)
+            this.localMediaStream.stop();
+        this._stop = 1;
+      },
+      save: function(){
+        alert('export');
+      },
+      cancel: function(){
+        alert('delete');
+        deleteReplay();
       }
     });
   </script>
 </element>
+
+
+
+
+
+
+

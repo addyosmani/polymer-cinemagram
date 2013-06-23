@@ -5,6 +5,7 @@
  * license that can be found in the LICENSE file.
  */
 -->
+
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-app.html">
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-ajax.html">
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-toolbar.html">
@@ -12,28 +13,26 @@
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-menu-item.html">
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-ribbon.html">
 <link rel="import" href="../scripts/polymer-all/toolkit-ui/elements/g-icon-button.html">
-<link rel="import" href="../scripts/polymer-all/polymer-ui-elements/polymer-ui-tabs/polymer-ui-tabs.html">
-<link rel="import" href="../scripts/polymer-all/polymer-ui-elements/polymer-ui-icon-button/polymer-ui-icon-button.html">
 
+<link rel="import" href="../scripts/polymer-all/polymer-ui-elements/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../scripts/polymer-all/polymer-ui-elements/polymer-ui-icon-button/polymer-ui-icon-toolbar.html">
+<link rel="import" href="../scripts/polymer-all/polymer-ui-elements/polymer-ui-tabs/polymer-ui-tabs.html">
 
 <link rel="import" href="../scripts/polymer-all/polymer-elements/polymer-layout/polymer-slide.html">
 
-<element name="pg-app" extends="g-app">
+
+
+<element name="pg-app" extends="g-app" class="polymer-ui-body-text">
   <link rel="stylesheet" href="css/pg-app.css" />
   <template>
     <g-panels id="panels" class="flex" index="1" transition="flow">
-
-
       <g-ribbon id="menu" label="Webagram" valueattr="label" on-activate="toggle" selected="{{selected}}">
     
           <g-menu-item src="images/sample.png" iconsize="32" label="Home"></g-menu-item>
           <g-menu-item src="images/sample.png" iconsize="32" label="Capture"></g-menu-item>
           <g-menu-item src="images/sample.png" iconsize="32" label="Activity"></g-menu-item>
-          <g-menu-item src="images/sample.png" iconsize="32" label="About"></g-menu-item>
-
+          <g-menu-item src="images/sample.png" iconsize="32" label="Settings"></g-menu-item>
       </g-ribbon>
-
-
       <div id="main">
         <g-toolbar>
           <g-icon-button src="images/menu.png" on-tap="toggle"></g-icon-button>
@@ -41,7 +40,7 @@
 
         </g-toolbar>
 
-        <div id="content" class="polymer-ui-dark-theme">
+        <div id="content">
           <p>Welcome to Webagram!</p>
   
           <div class="row">
@@ -69,18 +68,13 @@
 
 
 
+
        <g-toolbar>
-
           <g-icon-button src="images/record.png" on-tap="record"></g-icon-button>
-
           <g-icon-button src="images/stop.png" on-tap="stop"></g-icon-button>
-
           <g-icon-button src="images/play.png" on-tap="play"></g-icon-button>
-
           <g-icon-button src="images/save.png" on-tap="save"></g-icon-button>
-
           <g-icon-button src="images/delete.png" on-tap="cancel"></g-icon-button>
-
         </g-toolbar>
 
 
@@ -142,15 +136,24 @@
       },
       play: function(){
         alert('play');
+        replayVideo()
 
       },
       record: function(){
         alert('record');
+ if (!navigator.getUserMedia) {
+        console.log('nope');
+    } else {
 
-        navigator.getUserMedia({
-            video: true
-        }, function(stream){
-    
+      console.log('supported');
+          console.log(this.$.video);
+
+          var props = {
+            video:true
+          };
+
+        navigator.getUserMedia(props, function(stream){
+
           this.localMediaStream = stream;
           this.$.video.src = window.webkitURL.createObjectURL(stream);
 
@@ -161,11 +164,13 @@
           ch = 240;
           back.width = cw;
           back.height = ch;
-          draw(video, backcontext, cw, ch, this._stop);
+          draw(this.$.video, backcontext, cw, ch, this._stop);
 
         }, function(){
           alert('User Media not supported in your browser');
         });
+
+      }
 
 
       },

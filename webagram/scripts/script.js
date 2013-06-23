@@ -45,13 +45,6 @@ function errorHandler(err) {
     console.log(msg);
 }
 
-var stopRec = function () {
-    video.pause();
-    if (localMediaStream)
-        localMediaStream.stop();
-    _stop = 1;
-};
-
 
 
 var initDirectory = function (fs) {
@@ -134,7 +127,9 @@ var initFs = function (filesys) {
 
 var frameimages = [];
 
-var replayVideo = function (idx) {
+var replayVideo = function (idx, video) {
+
+    console.log('replay video called');
     // reads through all the images and show them (image path stored in _files)
 
     stopRec(); // stop video recording
@@ -200,30 +195,8 @@ function draw(v, bc, w, h, _stop) {
 }
 
 
-function success(stream) {
-    localMediaStream = stream;
-    video.src = window.webkitURL.createObjectURL(stream);
 
-    var back = document.getElementById('canvas');
-    var backcontext = back.getContext('2d');
 
-    cw = 360;
-    ch = 240;
-    back.width = cw;
-    back.height = ch;
-    draw(video, backcontext, cw, ch);
-
-}
-
-function playVideo() {
-    if (!navigator.getUserMedia) {
-        fallback();
-    } else {
-        navigator.getUserMedia({
-            video: true
-        }, success, fallback);
-    }
-}
 
 window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 window.requestFileSystem(window.TEMPORARY, 10 * 1024 * 1024, initFs, errorHandler);

@@ -37,3 +37,36 @@ img {
 body{
   font-family: 'Helvetica Neue', Helvetica, Arial, 'open sans', sans-serif;
 }
+
+.splash{
+  background: black;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  box-sizing: border-box;
+  text-align:center;
+}
+
+.splash .logo{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   color:white;
+   margin-top: -150px; /* Half the height */
+   margin-left: -100px; /* Half the width */
+
+}
+
+.splash .logo img{
+   width: 200px;
+   height:200px;
+}
+
+.fadeout{
+  -webkit-transition: all 2s ease-in-out;
+  -moz-transition: all 2s ease-in-out;
+  -ms-transition: all 2s ease-in-out;
+  -o-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
+}

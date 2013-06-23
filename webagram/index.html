@@ -9,6 +9,8 @@ license that can be found in the LICENSE file.
 <head>
   <title>Webagram</title>
   <script src="https://www.google.com/jsapi"></script>
+
+  
   <!-- pull in polymer -->
   <script src="scripts/polymer-all/polymer/polymer.js"></script>
   <!-- import elements -->
@@ -20,11 +22,8 @@ license that can be found in the LICENSE file.
   <link rel="import" href="scripts/polymer-all/polymer-ui-elements/polymer-ui-icon-button/polymer-ui-icon-button.html">
   <link rel="import" href="scripts/polymer-all/polymer-ui-elements/polymer-ui-menu/polymer-ui-menu.html">
   <link rel="import" href="scripts/polymer-all/polymer-ui-elements/polymer-ui-menu-item/polymer-ui-menu-item.html">
-
-
   <link rel="import" href="scripts/polymer-all/projects/pica/components/pi-feed-aggregator.html"/>
   <link rel="import" href="scripts/polymer-all/projects/pica/components/pi-items-view.html"/>
-
 
   <!-- regular styling -->
   <link rel="stylesheet" href="scripts/polymer-all/polymer-ui-elements/basic.css">
@@ -38,6 +37,14 @@ license that can be found in the LICENSE file.
 
   <!-- just an element, arranges sibling elements to fit their container -->
   <polymer-layout vertical></polymer-layout>
+
+
+  <section class="splash" fit>
+    <div class="logo">
+      <img src="src/images/camera.png"/>
+      <p>Webagram</p>
+    </div>
+  </section>
 
   <section fit>
     <polymer-layout></polymer-layout>
@@ -69,18 +76,12 @@ license that can be found in the LICENSE file.
   
 
       <section fit class="main polymer-ui-light-bg">
-        We started showing non-styled non-widgets because it's important
-        to realize that custom elements are a <b>primitive</b>. The idea 
-        is not to lock users into a framework, but the opposite, to unleash 
-        <b>creativity</b>.
-
-          <pi-feed-aggregator></pi-feed-aggregator>
-          <pi-items-view layout="quilt"></pi-items-view>
-
+        <pi-feed-aggregator></pi-feed-aggregator>
+        <pi-items-view layout="quilt"></pi-items-view>
       </section>
 
       <polymer-ui-toolbar>
-        <polymer-ui-icon-button src="src/images/record.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
+        <polymer-ui-icon-button src="src/images/media_record.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
         <polymer-ui-icon-button src="src/images/stop.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
         <polymer-ui-icon-button src="src/images/play.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
         <polymer-ui-icon-button src="src/images/save.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
@@ -93,7 +94,13 @@ license that can be found in the LICENSE file.
   <script>
     document.addEventListener('WebComponentsReady', function() {
       var fa = document.querySelector('pi-feed-aggregator');
+      var splash = document.querySelector('.splash');
       var itemsView = document.querySelector('pi-items-view');
+
+      setTimeout(function(){
+        splash.style.display = "none";
+      }, 2000);
+
       fa.addEventListener("response", 
         function(inEvent) {
           itemsView.items  = inEvent.detail.entries;

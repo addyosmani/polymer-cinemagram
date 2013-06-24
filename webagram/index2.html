@@ -1,23 +1,172 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
 Copyright 2013 The Polymer Authors. All rights reserved.
 Use of this source code is governed by a BSD-style
 license that can be found in the LICENSE file.
 -->
 <html>
-  <head>
-    <title>Webagram</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script src="scripts/polymer-all/polymer/polymer.js"></script>
-    <link rel="import" href="src/pg-app.html">
-  </head>
-  <body>
+
+<head>
+  <title>Webagram</title>
+  <script src="https://www.google.com/jsapi"></script>
+
+  
+  <!-- pull in polymer -->
+  <script src="scripts/polymer-all/polymer/polymer.js"></script>
+  <!-- import elements -->
+  <link rel="import" href="scripts/polymer-all/polymer-elements/polymer-view-source-link/polymer-view-source-link.html">
+  <link rel="import" href="scripts/polymer-all/polymer-elements/polymer-page/polymer-page.html">
+  <link rel="import" href="scripts/polymer-all/polymer-elements/polymer-layout/polymer-layout.html">
+  <link rel="import" href="scripts/polymer-all/polymer-elements/polymer-layout/polymer-slide.html">
+  <link rel="import" href="scripts/polymer-all/polymer-ui-elements/polymer-ui-toolbar/polymer-ui-toolbar.html">
+  <link rel="import" href="scripts/polymer-all/polymer-ui-elements/polymer-ui-icon-button/polymer-ui-icon-button.html">
+  <link rel="import" href="scripts/polymer-all/polymer-ui-elements/polymer-ui-menu/polymer-ui-menu.html">
+  <link rel="import" href="scripts/polymer-all/polymer-ui-elements/polymer-ui-menu-item/polymer-ui-menu-item.html">
+  <link rel="import" href="scripts/polymer-all/projects/pica/components/pi-feed-aggregator.html"/>
+  <link rel="import" href="scripts/polymer-all/projects/pica/components/pi-items-view.html"/>
+
+  <!-- regular styling -->
+  <link rel="stylesheet" href="scripts/polymer-all/polymer-ui-elements/basic.css">
+  <link rel="stylesheet" href="src/css/index.css">
+</head>
+
+<body class="polymer-ui-body-text polymer-ui-dark-bg" theme="polymer-ui-dark-theme">
+
+  <!-- just an element, this one makes document.body fit the viewport -->
+  <polymer-page fullbleed></polymer-page>
+
+  <!-- just an element, arranges sibling elements to fit their container -->
+  <polymer-layout vertical></polymer-layout>
+
+
+  <section class="splash" fit>
+    <div class="logo">
+      <img src="src/images/camera.png"/>
+      <p>Webagram</p>
+    </div>
+  </section>
+
+  <section fit>
+    <polymer-layout></polymer-layout>
+
+    <section class="sidebar polymer-ui-dark-bg">
+      <polymer-slide id="slide" closed></polymer-slide>
+      <polymer-layout vertical></polymer-layout>
+
+      <section class="logo">
+        <img src="src/images/camera.png"> Webagram
+      </section>
+
+      <!-- look-n-feel elements (aka widgets) -->
+      <polymer-ui-menu fit>
+        <polymer-ui-menu-item icon="dialog"><a href="../2. Not Just Widgets/">Previous</a></polymer-ui-menu-item>
+        <polymer-ui-menu-item icon="dialog"><a href="../4. Encapsulate/">Next</a></polymer-ui-menu-item>
+        <polymer-ui-menu-item icon="dialog"><a is="polymer-view-source-link">View Source</a></polymer-ui-menu-item>
+      </polymer-ui-menu>
+    </section>
+
+    <section fit>
+      <polymer-layout vertical></polymer-layout>
+
+      <!-- look-n-feel elements (aka widgets) -->
+      <polymer-ui-toolbar>
+        <polymer-ui-icon-button icon="drawer" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
+        <span fit>&nbsp;Activity</span>
+      </polymer-ui-toolbar>
+  
+
+      <section fit class="main polymer-ui-light-bg">
+        
+
+
+
+  <pi-items-view view="topics" layout="grid"></pi-items-view>
+  
+
+
+      </section>
+
+      <polymer-ui-toolbar>
+        <polymer-ui-icon-button src="src/images/media_record.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
+        <polymer-ui-icon-button src="src/images/stop.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
+        <polymer-ui-icon-button src="src/images/play.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
+        <polymer-ui-icon-button src="src/images/save.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
+        <polymer-ui-icon-button src="src/images/delete.png" onclick="document.querySelector('#slide').toggle()"></polymer-ui-icon-button>
+      </polymer-ui-toolbar>
+
+    </section>
+
+  <script>
+
+  function addItem(haystack, needle){
+    console.log(haystack, needle);
+    //haystack.push(haystack);
+  }
+
+
+    document.addEventListener('WebComponentsReady', function() {
+
+   var splash = document.querySelector('.splash');
+ 
+      setTimeout(function(){
+        splash.style.display = "none";
+      }, 2000);
+
+      var itemsView = document.querySelector('pi-items-view');
+
+/*
+      itemsView.items = [
+       {
+        title: 'Music', 
+        feed: [{
+          title: 'Indie Shuffle', 
+          feed: 'http://feeds.feedburner.com/indieshuffle'
+        }]
+      },{
+        title: 'Music', 
+        feed: [{
+          title: 'Indie Shuffle', 
+          feed: 'http://feeds.feedburner.com/indieshuffle'
+        }]
+      }];
+*/
+
+    itemsView.items = [];
+    itemsView.items.push({
+        title: 'Image.gif', 
+        feed: [{
+          title: 'Indie Shuffle', 
+          feed: 'http://feeds.feedburner.com/indieshuffle'
+        }]
+      });
+
+      fetchImageForTopics(itemsView.items);
+    });
+
     
-    <pg-app></pg-app>
+    function fetchImageForTopics(inTopics) {
+      inTopics.forEach(function(t) {
+        t.imgSrc = '';
+        var fa = document.createElement('pi-feed-aggregator');
+        fa.cancelUnbindAll();
+        fa.count = 4;
+        fa.addEventListener('response', function(e) {
+          var ns = e.detail && e.detail.entries || [];
+          for (var i = 0, n; n = ns[i]; i++) {
+            if (n.imgSrc) {
+              t.imgSrc = n.imgSrc;
+              t.unread = 200;
+              return;
+            }
+          }
+          fa.unbindAll();
+        });
+        fa.feed = t.feed;
+      });
+    }
+  </script>
 
-	<script src="scripts/gif.js"></script>
-	<script src="scripts/gif.worker.js"></script>
-	<script src="scripts/script.js"></script>
+  </section>
 
-  </body>
+</body>
 </html>

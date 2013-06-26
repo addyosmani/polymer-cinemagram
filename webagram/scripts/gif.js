@@ -63,7 +63,7 @@
                 for (a in b) c = b[a], null != this.options[a] ? this.options[a] : this.options[a] = c
             }
             return h(a, f), b = {
-                workerScript: 'gif.worker.js',
+                workerScript: 'scripts/gif.worker.js',
                 workers: 2,
                 repeat: 0,
                 background: '#fff',

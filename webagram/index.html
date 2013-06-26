@@ -296,6 +296,7 @@ var writeToFile = function(name, data) {
 var initFs = function(filesys) {
   window.webagram.fs = filesys;
   setTimeout(initDirectory(window.webagram.fs), 500);
+  addLast();
 };
 
 
@@ -376,6 +377,7 @@ var readFile = function(filename) {
         //var myImage = document.createElement('img');
         //myImage.src = this.result;
         //document.body.appendChild(myImage);
+        window.webagram.addImage(this.result);
 
 
       };
@@ -451,7 +453,7 @@ var readFile = function(filename) {
     }
   }
 
-  function playLast(){
+  function addLast(){
     readFile('/Video/lastvideo');
   }
 
@@ -471,9 +473,13 @@ var readFile = function(filename) {
 
    window.webagram.replay = document.getElementById('replay-screen');
 
+   window.webagram.activity = document.getElementById('activity');
+
    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 window.requestFileSystem(window.TEMPORARY, 10*1024*1024, initFs, errorHandler);
 
+
+    
 
  
     setTimeout(function(){
@@ -482,6 +488,15 @@ window.requestFileSystem(window.TEMPORARY, 10*1024*1024, initFs, errorHandler);
 
 
     itemsView.items = [];
+
+    window.webagram.addImage = function(src){
+      var img = document.createElement('img');
+      img.src = src;
+      window.webagram.activity.appendChild(img);
+    }
+    
+    /*
+    
     itemsView.items.push({
         title: 'Image.gif', 
         feed: [{
@@ -491,15 +506,20 @@ window.requestFileSystem(window.TEMPORARY, 10*1024*1024, initFs, errorHandler);
       });
 
       fetchImageForTopics(itemsView.items);
+*/
+
     });
+
 
     
     function fetchImageForTopics(inTopics) {
       inTopics.forEach(function(t) {
         t.imgSrc = '';
+
         var fa = document.createElement('pi-feed-aggregator');
         fa.cancelUnbindAll();
         fa.count = 4;
+
         fa.addEventListener('response', function(e) {
           var ns = e.detail && e.detail.entries || [];
           for (var i = 0, n; n = ns[i]; i++) {
@@ -513,7 +533,9 @@ window.requestFileSystem(window.TEMPORARY, 10*1024*1024, initFs, errorHandler);
         });
         fa.feed = t.feed;
       });
+
     }
+
   </script>
 
   </section>

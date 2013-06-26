@@ -8,14 +8,15 @@ license that can be found in the LICENSE file.
 
 <head>
   <title>GIFit</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <script src="https://www.google.com/jsapi"></script>
 
-  
+
   <!-- pull in polymer -->
   <script src="scripts/polymer-all/polymer/polymer.js"></script>
-
-<script src="scripts/gif.js"></script>
-<script src="scripts/gif.worker.js"></script>
+  <script src="scripts/gif.js"></script>
+  <script src="scripts/gif.worker.js"></script>
 
   <!-- import elements -->
   <link rel="import" href="scripts/polymer-all/polymer-elements/polymer-view-source-link/polymer-view-source-link.html">
@@ -81,7 +82,10 @@ license that can be found in the LICENSE file.
         
         <!-- grid view -->
         <section id="activity" class="panel activity">
+          <p><strong>Hullo!</strong> You can hit <a href="javascript:switchPanel('capture', 'Capture')"><img width="150" src="src/images/camera.png"/></a> to record a new GIF.</p>
+          <!--
           <pi-items-view view="topics" layout="grid"></pi-items-view>
+        -->
         </section>
 
         <!--capture view-->
@@ -97,10 +101,11 @@ license that can be found in the LICENSE file.
           <polymer-ui-toolbar class="main polymer-ui-light-bg" theme="polymer-ui-light-theme">
             <polymer-ui-icon-button src="src/images/media_record.png" onclick="recordVideo()"></polymer-ui-icon-button>
             <polymer-ui-icon-button src="src/images/stop.png" onclick="stopRec()"></polymer-ui-icon-button>
-            <polymer-ui-icon-button src="src/images/play.png" onclick="replayVideo()"></polymer-ui-icon-button>
+            <!--
+            <polymer-ui-icon-button src="src/images/play.png"
+             onclick="replayVideo()"></polymer-ui-icon-button>-->
             <polymer-ui-icon-button src="src/images/save.png" onclick="makeGif()"></polymer-ui-icon-button>
             <polymer-ui-icon-button src="src/images/delete.png" onclick="deleteReplay()"></polymer-ui-icon-button>
-            <polymer-ui-icon-button src="src/images/delete.png" onclick="playLast()"></polymer-ui-icon-button>
           </polymer-ui-toolbar>
 
 <!--
@@ -160,8 +165,8 @@ var frames = 0;
 
 window.webagram.gif = new GIF({
     workers: 4,
-    quality: 10,
-    delay: 500,
+    quality: 30,
+    delay: 100,
     repeat: 0
   });
 
@@ -416,7 +421,7 @@ var readFile = function(filename) {
       bc.drawImage(v, 0, 0, w, h);
       var stringData=window.webagram.canvas.toDataURL();
 
-      window.webagram.gif.addFrame(window.webagram.canvas, {copy: true});
+      window.webagram.gif.addFrame(window.webagram.canvas, {copy: true, delay: 100});
       
       if(window.webagram.fs !== null) {
         console.log('drawcall', frames);
@@ -451,6 +456,7 @@ var readFile = function(filename) {
     } else {
       navigator.getUserMedia({video: true}, success, fallback);
     }
+
   }
 
   function addLast(){
@@ -462,7 +468,7 @@ var readFile = function(filename) {
 
    var splash = document.querySelector('.splash');
    var panels = document.querySelectorAll('.panel');
-   var itemsView = document.querySelector('pi-items-view');
+   //var itemsView = document.querySelector('pi-items-view');
    var el;
 
    window.webagram.video = document.querySelector('video');
@@ -480,14 +486,12 @@ window.requestFileSystem(window.TEMPORARY, 10*1024*1024, initFs, errorHandler);
 
 
     
-
- 
     setTimeout(function(){
       splash.style.display = "none";
     }, 2000);
 
 
-    itemsView.items = [];
+    //itemsView.items = [];
 
     window.webagram.addImage = function(src){
       var img = document.createElement('img');
@@ -507,11 +511,9 @@ window.requestFileSystem(window.TEMPORARY, 10*1024*1024, initFs, errorHandler);
 
       fetchImageForTopics(itemsView.items);
 */
-
     });
 
 
-    
     function fetchImageForTopics(inTopics) {
       inTopics.forEach(function(t) {
         t.imgSrc = '';
